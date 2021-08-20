@@ -1,11 +1,10 @@
-import axios from 'axios';
-import React, { useEffect, useState, useRef } from 'react';
-import { View, Text, ScrollView } from 'react-native';
+import React, { useRef, useState } from 'react';
+import { FlatList, Dimensions } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import styled from 'styled-components/native';
-import useSWR from 'swr';
+import { useSWRInfinite } from 'swr';
 import { fetcher } from '../commons/utils';
-import { Post } from '../components';
+import { Header, Post, StoriesSlider } from '../components';
 import LottieView from 'lottie-react-native';
 
 const Container = styled.View`
@@ -14,28 +13,49 @@ const Container = styled.View`
   align-items: center;
 `;
 
-const URL =
-  'https://api.thecatapi.com/v1/images/search?limit=10&page=10&order=Desc';
+const getKey = (pageIndex, previousPageData) => {
+  if (previousPageData && !previousPageData.length) return null;
+  return `https://api.thecatapi.com/v1/images/search?limit=10&page=${pageIndex}&order=Desc`;
+};
 
 const Home = () => {
-  const { data, error } = useSWR(URL, fetcher, {
+  const { data, size, setSize } = useSWRInfinite(getKey, fetcher, {
     initialData: [],
     revalidateOnMount: true,
   });
+
   const animation = useRef(null);
 
   const { top } = useSafeAreaInsets();
 
+  const fetchMore = () => {
+    setSize(size + 1);
+  };
+
   return (
     <Container paddingTop={top}>
       {data.length > 0 && (
-        <ScrollView>
-          {React.Children.toArray(
-            data.map((item) => {
-              return <Post imageUrl={item.url} />;
-            })
-          )}
-        </ScrollView>
+        <FlatList
+          contentContainerStyle={{
+            width: Dimensions.get('screen').width,
+          }}
+          ListHeaderComponent={
+            <>
+              <Header />
+
+              <StoriesSlider />
+            </>
+          }
+          data={data}
+          keyExtractor={(item) => `Post__${item.id}`}
+          renderItem={({ item }) => {
+            return React.Children.toArray(
+              item.map((cat) => <Post imageUrl={cat.url} />)
+            );
+          }}
+          onEndReached={fetchMore}
+          onEndReachedThreshold={0.9}
+        />
       )}
 
       {data.length === 0 && (

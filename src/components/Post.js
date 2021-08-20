@@ -3,6 +3,7 @@ import { View, Text, TouchableOpacity, Dimensions } from 'react-native';
 import { Entypo, Ionicons, FontAwesome } from '@expo/vector-icons';
 import styled from 'styled-components/native';
 import { useState } from 'react';
+import { AuxBoldText, AuxRow } from '../commons/components/AuxStyles';
 
 const { width, height } = Dimensions.get('screen');
 
@@ -13,9 +14,7 @@ const Header = styled.View`
   padding: 11px 10px;
   align-items: center;
 `;
-const AuxRow = styled.View`
-  flex-direction: row;
-`;
+
 const AuthorAvatar = styled.Image`
   width: 32px;
   height: 32px;
@@ -70,9 +69,6 @@ const LikeText = styled.Text`
   font-size: 13px;
   line-height: 18px;
   letter-spacing: -0.07px;
-`;
-const AuxBoldText = styled.Text`
-  font-weight: bold;
 `;
 
 const Description = styled.Text`

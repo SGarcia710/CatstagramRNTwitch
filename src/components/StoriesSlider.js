@@ -3,8 +3,11 @@ import styled from 'styled-components/native';
 import { LinearGradient } from 'expo-linear-gradient';
 
 import { Ionicons } from '@expo/vector-icons';
+import { decideSize } from '../commons/utils';
+import { useTheme } from '@react-navigation/native';
+import { useColorScheme } from 'react-native-appearance';
 
-const DATA = [
+export const STORIES_DATA = [
   {
     url: 'https://images.pexels.com/photos/3991140/pexels-photo-3991140.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940',
     userName: 'sgarcia',
@@ -37,9 +40,16 @@ const DATA = [
     url: 'https://images.pexels.com/photos/9216171/pexels-photo-9216171.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940',
     userName: 'soydevrock',
   },
+  {
+    url: 'https://images.pexels.com/photos/8671839/pexels-photo-8671839.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940',
+    userName: 'edwarddica',
+  },
 ];
+
 const Container = styled.ScrollView`
   width: 100%;
+  padding-top: ${decideSize(9)}px;
+  padding-bottom: ${decideSize(8)}px;
 `;
 
 const UserStory = styled.TouchableOpacity`
@@ -49,40 +59,42 @@ const UserStory = styled.TouchableOpacity`
 `;
 
 const CircleContainer = styled(LinearGradient)`
-  margin-bottom: 5px;
-  width: 62px;
-  height: 62px;
-  border-radius: ${62 / 2}px;
+  margin-bottom: ${decideSize(5)}px;
+  width: ${decideSize(62)}px;
+  height: ${decideSize(62)}px;
+  border-radius: ${decideSize(62) / 2}px;
 
   align-items: center;
   justify-content: center;
 `;
 const HighlightCircle = styled.View`
-  margin-bottom: 5px;
-  width: 62px;
-  height: 62px;
-  border-radius: ${62 / 2}px;
+  margin-bottom: ${decideSize(5)}px;
+  width: ${decideSize(62)}px;
+  height: ${decideSize(62)}px;
+  border-radius: ${decideSize(62) / 2}px;
 
   align-items: center;
   justify-content: center;
 `;
 
 const Avatar = styled.Image`
-  width: 56px;
-  height: 56px;
-  border-radius: ${56 / 2}px;
+  width: ${decideSize(56)}px;
+  height: ${decideSize(56)}px;
+  border-radius: ${decideSize(56) / 2}px;
 `;
 
 const UserName = styled.Text`
-  font-size: 12px;
-  line-height: 14px;
+  font-size: ${decideSize(12)}px;
+  line-height: ${decideSize(14)}px;
   text-align: center;
-  letter-spacing: -0.01px;
+  letter-spacing: -${decideSize(0.01)}px;
   color: #262626;
 `;
 
 const StoriesSlider = (props) => {
-  const _data = props.data ? props.data : DATA;
+  const { colors } = useTheme();
+  const colorSchema = useColorScheme();
+  const _data = props.data ? props.data : STORIES_DATA;
   return (
     <Container horizontal showsHorizontalScrollIndicator={false}>
       {!!props.areHighlightStories && (
@@ -93,10 +105,16 @@ const StoriesSlider = (props) => {
               borderColor: '#C7C7CC',
             }}
           >
-            <Ionicons name="add" size={22} color="black" />
+            <Ionicons name="add" size={decideSize(22)} color={colors.text} />
           </HighlightCircle>
 
-          <UserName>New</UserName>
+          <UserName
+            style={{
+              color: colors.text,
+            }}
+          >
+            New
+          </UserName>
         </UserStory>
       )}
       {React.Children.toArray(
@@ -117,12 +135,18 @@ const StoriesSlider = (props) => {
               <Avatar
                 style={{
                   borderWidth: 1.5,
-                  borderColor: 'white',
+                  borderColor: colorSchema === 'dark' ? 'black' : 'white',
                 }}
                 source={{ uri: user.url }}
               />
             </CircleContainer>
-            <UserName>{user.userName}</UserName>
+            <UserName
+              style={{
+                color: colors.text,
+              }}
+            >
+              {user.userName}
+            </UserName>
           </UserStory>
         ))
       )}

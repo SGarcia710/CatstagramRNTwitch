@@ -4,6 +4,7 @@ import { Entypo, Ionicons, FontAwesome } from '@expo/vector-icons';
 import styled from 'styled-components/native';
 import { useState } from 'react';
 import { AuxBoldText, AuxRow } from '../commons/components/AuxStyles';
+import { useTheme } from '@react-navigation/native';
 
 const { width, height } = Dimensions.get('screen');
 
@@ -88,6 +89,7 @@ const Age = styled.Text`
 
 const Post = (props) => {
   const [liked, setLiked] = useState(false);
+  const { colors } = useTheme();
 
   return (
     <Container>
@@ -97,8 +99,20 @@ const Post = (props) => {
             source={{ uri: 'https://sebastiangarcia.dev/images/avatar.jpg' }}
           />
           <HeaderInfo>
-            <AuthorName>sgarcia</AuthorName>
-            <PostLocation>Tokyo, Japan</PostLocation>
+            <AuthorName
+              style={{
+                color: colors.text,
+              }}
+            >
+              sgarcia
+            </AuthorName>
+            <PostLocation
+              style={{
+                color: colors.text,
+              }}
+            >
+              Tokyo, Japan
+            </PostLocation>
           </HeaderInfo>
         </AuxRow>
         <TouchableOpacity
@@ -106,7 +120,7 @@ const Post = (props) => {
             console.log('Hola, me presionaste');
           }}
         >
-          <Entypo name="dots-three-horizontal" size={24} color="black" />
+          <Entypo name="dots-three-horizontal" size={24} color={colors.text} />
         </TouchableOpacity>
       </Header>
 
@@ -124,19 +138,23 @@ const Post = (props) => {
               <Ionicons
                 name={`ios-heart-${liked ? 'sharp' : 'outline'}`}
                 size={26}
-                color={liked ? 'red' : 'black'}
+                color={liked ? 'red' : colors.text}
               />
             </Action>
             <Action hasMargin>
-              <FontAwesome name="comment-o" size={24} color="black" />
+              <FontAwesome name="comment-o" size={24} color={colors.text} />
             </Action>
             <Action>
-              <Ionicons name="paper-plane-outline" size={24} color="black" />
+              <Ionicons
+                name="paper-plane-outline"
+                size={24}
+                color={colors.text}
+              />
             </Action>
           </AuxRow>
 
           <Action>
-            <FontAwesome name="bookmark-o" size={24} color="black" />
+            <FontAwesome name="bookmark-o" size={24} color={colors.text} />
           </Action>
         </PostActions>
 
@@ -144,18 +162,33 @@ const Post = (props) => {
           <LikeImage
             source={{ uri: 'https://sebastiangarcia.dev/images/avatar.jpg' }}
           />
-          <LikeText>
+          <LikeText
+            style={{
+              color: colors.text,
+            }}
+          >
             Liked by <AuxBoldText>craig_love</AuxBoldText> and{' '}
             <AuxBoldText> 44,686 others</AuxBoldText>
           </LikeText>
         </Likes>
 
-        <Description numberOfLines={3}>
+        <Description
+          style={{
+            color: colors.text,
+          }}
+          numberOfLines={3}
+        >
           <AuthorName>sgarcia</AuthorName> The game in Japan was amazing and I
           want to share some photos
         </Description>
 
-        <Age>2h ago</Age>
+        <Age
+          style={{
+            color: colors.text,
+          }}
+        >
+          2h ago
+        </Age>
       </HorizontalMargin>
     </Container>
   );
